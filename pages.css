@@ -783,3 +783,31 @@
   border-radius: 99px;
   transition: width 0.8s ease;
 }
+
+/* ── Sales Cards (mobile-first) ── */
+.sales-cards { display: flex; flex-direction: column; gap: 10px; padding: 12px; }
+
+.sale-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--trans-fast);
+}
+.sale-card:hover { box-shadow: var(--shadow-md); }
+
+.sale-card-main { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+
+.sale-card-left { display: flex; align-items: flex-start; gap: 10px; flex: 1; min-width: 0; }
+
+.sale-card-info { flex: 1; min-width: 0; }
+.sale-card-product { font-weight: 600; font-size: .95rem; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sale-card-client { font-size: .8rem; color: var(--text-muted); margin-top: 2px; }
+.sale-card-variant { display: flex; align-items: center; gap: 5px; font-size: .78rem; color: var(--text-secondary); margin-top: 4px; flex-wrap: wrap; }
+
+.sale-card-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
+.sale-card-total { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 700; color: var(--rose-gold); }
+.sale-card-date { font-size: .72rem; color: var(--text-muted); }
+
+.sale-card-footer { display: flex; gap: 6px; flex-wrap: wrap; padding-top: 10px; border-top: 1px solid var(--border-light); }

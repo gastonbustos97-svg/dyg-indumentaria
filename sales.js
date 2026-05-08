@@ -65,28 +65,9 @@ function renderSales() {
       </select>
     </div>
 
-    <!-- Table -->
-    <div class="card" style="padding:0">
-      <div class="table-wrap" style="border:none">
-        <table class="table" id="sales-table">
-          <thead>
-            <tr>
-              <th>Prenda</th>
-              <th>Clienta</th>
-              <th>Variante</th>
-              <th>Cant.</th>
-              <th>Total</th>
-              <th>Medio</th>
-              <th>Estado</th>
-              <th>Fecha</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="sales-tbody">
-            ${renderSalesTbody(sales)}
-          </tbody>
-        </table>
-      </div>
+    <!-- Sales list -->
+    <div id="sales-tbody">
+      ${renderSalesTbody(sales)}
     </div>
   `;
 
@@ -95,49 +76,46 @@ function renderSales() {
 
 function renderSalesTbody(sales) {
   if (!sales.length) return `
-    <tr><td colspan="9">
-      <div class="table-empty">
-        <div class="table-empty-icon">🛍️</div>
-        <p>Sin ventas registradas</p>
-      </div>
-    </td></tr>
+    <div class="table-empty" style="padding:40px;text-align:center">
+      <div class="table-empty-icon">🛍️</div>
+      <p>Sin ventas registradas</p>
+    </div>
   `;
 
-  return sales.map((s, i) => `
-    <tr class="animate-fade-in-up" style="animation-delay:${i*0.02}s">
-      <td>
-        <div class="sale-product-info">
-          <div class="sale-product-name">${esc(s.productName)}</div>
+  return `
+    <div class="sales-cards">
+      ${sales.map((s, i) => `
+        <div class="sale-card animate-fade-in-up" style="animation-delay:${i*0.02}s">
+          <div class="sale-card-main">
+            <div class="sale-card-left">
+              ${avatarHTML(s.clientName, null, 'sm')}
+              <div class="sale-card-info">
+                <div class="sale-card-product">${esc(s.productName)}</div>
+                <div class="sale-card-client">${esc(s.clientName)}</div>
+                <div class="sale-card-variant">
+                  ${s.variant ? colorDotHTML(s.variant.colorHex, s.variant.color) : ''}
+                  <span>${esc(s.variant?.size || '')}${s.variant ? ' · ' + esc(s.variant.color) : ''}</span>
+                  ${(s.qty||1) > 1 ? `<span style="color:var(--text-muted)">× ${s.qty}</span>` : ''}
+                </div>
+              </div>
+            </div>
+            <div class="sale-card-right">
+              <div class="sale-card-total">${fmt(s.price * (s.qty||1))}</div>
+              <div class="sale-card-date">${fmtDate(s.date, 'relative')}</div>
+              <button class="btn btn-danger btn-sm btn-icon" onclick="deleteSaleConfirm('${esc(s.id)}')">🗑️</button>
+            </div>
+          </div>
+          <div class="sale-card-footer">
+            ${paymentBadge(s.paymentMethod)}
+            ${s.isPaid
+              ? `<span class="badge badge-success">✓ Pagada</span>`
+              : `<span class="badge badge-warning">⏳ Pendiente</span>`
+            }
+          </div>
         </div>
-      </td>
-      <td>
-        <div class="sale-row-client">
-          ${avatarHTML(s.clientName, null, 'sm')}
-          <span style="font-size:.85rem">${esc(s.clientName)}</span>
-        </div>
-      </td>
-      <td>
-        <div style="display:flex;align-items:center;gap:6px;font-size:.8rem">
-          ${s.variant ? colorDotHTML(s.variant.colorHex, s.variant.color) : ''}
-          <span>${esc(s.variant?.size || '')} ${s.variant ? '·' : ''} ${esc(s.variant?.color || '')}</span>
-        </div>
-      </td>
-      <td style="font-weight:600;text-align:center">${s.qty || 1}</td>
-      <td style="font-weight:700;color:var(--gold)">${fmt(s.price * (s.qty||1))}</td>
-      <td>${paymentBadge(s.paymentMethod)}</td>
-      <td>
-        ${s.isPaid
-          ? `<span class="badge badge-success">✓ Pagada</span>`
-          : `<span class="badge badge-warning">⏳ Pendiente</span>`
-        }
-      </td>
-      <td style="font-size:.8rem;color:var(--text-muted);white-space:nowrap">${fmtDate(s.date, 'relative')}</td>
-      <td>
-        <button class="btn btn-danger btn-sm btn-icon" title="Eliminar venta"
-                onclick="deleteSaleConfirm('${esc(s.id)}')">🗑️</button>
-      </td>
-    </tr>
-  `).join('');
+      `).join('')}
+    </div>
+  `;
 }
 
 function filterSalesTable(searchVal) {
@@ -154,6 +132,7 @@ function filterSalesTable(searchVal) {
 
   const tbody = document.getElementById('sales-tbody');
   if (tbody) tbody.innerHTML = renderSalesTbody(sales);
+  window._allSales = window._allSales || store.getSales();
 }
 
 // ── Add Sale Modal ────────────────────────────
