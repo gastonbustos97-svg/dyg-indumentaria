@@ -35,7 +35,7 @@ function renderReports() {
     </div>
 
     <!-- Charts row -->
-    <div class="reports-grid" style="margin-bottom:18px">
+    <div class="reports-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-bottom:18px">
       <div class="chart-card">
         <div class="chart-card-header">
           <div>
@@ -62,7 +62,7 @@ function renderReports() {
     </div>
 
     <!-- Bottom row -->
-    <div class="reports-grid">
+    <div class="reports-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:18px">
       <!-- Top products -->
       <div class="chart-card">
         <div class="chart-card-header">

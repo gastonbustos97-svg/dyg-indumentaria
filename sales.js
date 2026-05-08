@@ -27,7 +27,7 @@ function renderSales() {
     </div>
 
     <!-- Summary -->
-    <div class="sales-summary-row">
+    <div class="stats-grid sales-summary-row">
       <div class="stat-card" style="--icon-bg:rgba(110,203,154,0.08);--icon-border:rgba(110,203,154,0.2)">
         <div class="stat-card-icon">☀️</div>
         <div class="stat-card-label">Ventas Hoy</div>
@@ -132,7 +132,6 @@ function filterSalesTable(searchVal) {
 
   const tbody = document.getElementById('sales-tbody');
   if (tbody) tbody.innerHTML = renderSalesTbody(sales);
-  window._allSales = window._allSales || store.getSales();
 }
 
 // ── Add Sale Modal ────────────────────────────
