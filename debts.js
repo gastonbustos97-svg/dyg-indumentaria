@@ -24,38 +24,32 @@ function renderDebts() {
     </div>
 
     <!-- Total banner -->
-    <div class="debts-header-bar">
-      <div>
-        <div class="debts-total-label">⚠️ Total Pendiente</div>
-        <div class="debts-total-value" id="debts-total-val">${fmt(0)}</div>
+    <div style="background:var(--bg-card);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:16px;margin-bottom:16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+      <div style="flex:1;min-width:120px">
+        <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--danger);margin-bottom:4px">⚠️ Total Pendiente</div>
+        <div id="debts-total-val" style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:var(--text-primary)">${fmt(0)}</div>
       </div>
-      <div style="display:flex;gap:18px;flex-wrap:wrap">
+      <div style="display:flex;gap:16px;flex-wrap:wrap">
         <div style="text-align:center">
           <div style="font-size:1.2rem;font-weight:700;color:var(--text-primary)">${activeDebts.length}</div>
-          <div style="font-size:.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em">Activas</div>
+          <div style="font-size:.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em">Activas</div>
         </div>
         <div style="text-align:center">
           <div style="font-size:1.2rem;font-weight:700;color:var(--success)">${paidDebts.length}</div>
-          <div style="font-size:.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em">Canceladas</div>
+          <div style="font-size:.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em">Canceladas</div>
         </div>
         <div style="text-align:center">
-          <div style="font-size:1.2rem;font-weight:700;color:var(--gold)">${allDebts.length}</div>
-          <div style="font-size:.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em">Total</div>
+          <div style="font-size:1.2rem;font-weight:700;color:var(--rose-gold)">${allDebts.length}</div>
+          <div style="font-size:.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em">Total</div>
         </div>
       </div>
     </div>
 
     <!-- Tabs -->
-    <div class="tabs">
-      <button class="tab-btn active" id="tab-active" onclick="switchDebtTab('active',this)">
-        ⏳ Pendientes (${activeDebts.length})
-      </button>
-      <button class="tab-btn" id="tab-paid" onclick="switchDebtTab('paid',this)">
-        ✅ Canceladas (${paidDebts.length})
-      </button>
-      <button class="tab-btn" id="tab-all" onclick="switchDebtTab('all',this)">
-        📋 Todas (${allDebts.length})
-      </button>
+    <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;-webkit-overflow-scrolling:touch;scrollbar-width:none">
+      <button class="tab-btn active" id="tab-active" onclick="switchDebtTab('active',this)" style="white-space:nowrap;flex-shrink:0">⏳ Pendientes (${activeDebts.length})</button>
+      <button class="tab-btn" id="tab-paid" onclick="switchDebtTab('paid',this)" style="white-space:nowrap;flex-shrink:0">✅ Canceladas (${paidDebts.length})</button>
+      <button class="tab-btn" id="tab-all" onclick="switchDebtTab('all',this)" style="white-space:nowrap;flex-shrink:0">📋 Todas (${allDebts.length})</button>
     </div>
 
     <!-- Debts list -->
@@ -90,58 +84,62 @@ function renderDebtsListHTML(debts) {
   `;
 
   return debts.map((d, i) => {
-    const remaining = d.totalAmount - d.paidAmount;
-    const pct       = Math.round((d.paidAmount / d.totalAmount) * 100);
-    const age       = Math.floor((Date.now() - d.createdAt) / 86400000);
+    const remaining   = d.totalAmount - d.paidAmount;
+    const pct         = Math.round((d.paidAmount / d.totalAmount) * 100);
+    const age         = Math.floor((Date.now() - d.createdAt) / 86400000);
     const ageDotColor = age < 7 ? 'var(--success)' : age < 30 ? 'var(--warning)' : 'var(--danger)';
 
     return `
-      <div class="debt-card animate-fade-in-up ${d.isPaid ? 'paid' : ''}" style="margin-bottom:10px;animation-delay:${i*0.05}s">
-        <div class="debt-age-dot" style="background:${ageDotColor}" title="${age} días"></div>
+      <div style="
+        background:var(--bg-card);
+        border:1px solid var(--border-light);
+        border-radius:var(--radius-md);
+        padding:14px;
+        margin-bottom:10px;
+        box-shadow:var(--shadow-sm);
+        animation-delay:${i*0.05}s;
+      " class="animate-fade-in-up ${d.isPaid ? 'opacity:0.7' : ''}">
 
-        ${avatarHTML(d.clientName, null, 'md')}
-
-        <div class="debt-card-info">
-          <div class="debt-card-client">${esc(d.clientName)}</div>
-          <div class="debt-card-detail">
-            ${esc(d.description)} · Hace ${age} día${age !== 1 ? 's' : ''}
+        <!-- Fila superior: avatar + nombre + monto -->
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <div style="position:relative;flex-shrink:0">
+            ${avatarHTML(d.clientName, null, 'md')}
+            <div style="position:absolute;top:0;right:0;width:9px;height:9px;border-radius:50%;background:${ageDotColor};border:2px solid var(--bg-card)"></div>
           </div>
-          <div style="margin-top:8px">
-            <div style="display:flex;justify-content:space-between;font-size:.72rem;color:var(--text-muted);margin-bottom:4px">
-              <span>Pagado: ${fmt(d.paidAmount)}</span>
-              <span>${pct}%</span>
-            </div>
-            <div class="progress-wrap">
-              <div class="progress-fill" style="width:${pct}%;background:${d.isPaid ? 'var(--success)' : 'var(--grad-gold)'}"></div>
-            </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:600;font-size:.95rem;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(d.clientName)}</div>
+            <div style="font-size:.78rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(d.description)}</div>
           </div>
-          ${d.payments.length > 0 ? `
-            <div style="margin-top:8px;font-size:.72rem;color:var(--text-muted)">
-              ${d.payments.length} pago${d.payments.length !== 1 ? 's' : ''} registrado${d.payments.length !== 1 ? 's' : ''}
+          <div style="flex-shrink:0;text-align:right">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:${d.isPaid ? 'var(--success)' : 'var(--danger)'}">
+              ${d.isPaid ? '✓ ' : ''}${fmt(remaining)}
             </div>
-          ` : ''}
+            <div style="font-size:.7rem;color:var(--text-muted)">de ${fmt(d.totalAmount)}</div>
+          </div>
         </div>
 
-        <div style="text-align:right;flex-shrink:0">
-          <div class="debt-card-amount">${d.isPaid ? '✓ ' : ''}${fmt(remaining)}</div>
-          <div style="font-size:.72rem;color:var(--text-muted);margin-top:2px">de ${fmt(d.totalAmount)}</div>
+        <!-- Barra de progreso -->
+        <div style="margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between;font-size:.7rem;color:var(--text-muted);margin-bottom:4px">
+            <span>Pagado: ${fmt(d.paidAmount)} · Hace ${age} día${age !== 1 ? 's' : ''}</span>
+            <span>${pct}%</span>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-fill" style="width:${pct}%;background:${d.isPaid ? 'var(--success)' : 'var(--grad-gold)'}"></div>
+          </div>
+          ${d.payments.length > 0 ? `<div style="font-size:.7rem;color:var(--text-muted);margin-top:4px">${d.payments.length} pago${d.payments.length !== 1 ? 's' : ''} registrado${d.payments.length !== 1 ? 's' : ''}</div>` : ''}
         </div>
 
-        <div class="debt-card-actions">
+        <!-- Acciones -->
+        <div style="display:flex;gap:6px;flex-wrap:wrap;padding-top:8px;border-top:1px solid var(--border-light)">
           ${!d.isPaid ? `
-            <button class="btn btn-success btn-sm" onclick="openPaymentModal('${esc(d.id)}')">
-              💳 Pago
-            </button>
-            <button class="btn btn-primary btn-sm" onclick="markDebtFullyPaid('${esc(d.id)}')">
-              ✅ Cancelar
-            </button>
+            <button class="btn btn-success btn-sm" onclick="openPaymentModal('${esc(d.id)}')">💳 Pago</button>
+            <button class="btn btn-primary btn-sm" onclick="markDebtFullyPaid('${esc(d.id)}')">✅ Cancelar</button>
           ` : `
-            <span class="badge badge-success">✓ Cancelada</span>
+            <span class="badge badge-success" style="padding:6px 10px">✓ Cancelada</span>
           `}
-          <button class="btn btn-ghost btn-sm btn-icon" title="Ver historial"
-                  onclick="openDebtHistory('${esc(d.id)}')">📋</button>
-          <button class="btn btn-danger btn-sm btn-icon" title="Eliminar"
-                  onclick="deleteDebtConfirm('${esc(d.id)}')">🗑️</button>
+          <button class="btn btn-ghost btn-sm" onclick="openDebtHistory('${esc(d.id)}')">📋</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteDebtConfirm('${esc(d.id)}')">🗑️</button>
         </div>
       </div>
     `;
