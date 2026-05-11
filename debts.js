@@ -12,7 +12,7 @@ function renderDebts() {
   const totalPending = store.getTotalDebt();
 
   page.innerHTML = `
-    <div style="max-width:600px;margin:0 auto">
+    <div>
 
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px">
         <div>
