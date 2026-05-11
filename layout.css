@@ -302,3 +302,10 @@
   .bottom-nav-item { padding: 6px 8px; min-width: 44px; }
   .bottom-nav-item .bn-icon { font-size: 1.2rem; }
 }
+
+/* ── Topbar mobile: ocultar botones extra ── */
+@media (max-width: 768px) {
+  .topbar-btn.theme-toggle-btn { display: flex; }
+  .topbar-actions > .topbar-btn:not(.theme-toggle-btn) { display: none; }
+  .topbar-actions { gap: 4px; }
+}
