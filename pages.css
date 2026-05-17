@@ -789,39 +789,23 @@
    ══════════════════════════════════════════ */
 
 /* ── Sales Cards ── */
-.sales-cards { display: flex; flex-direction: column; gap: 8px; padding: 4px 0; }
-
+.sales-cards { display: flex; flex-direction: column; gap: 10px; padding: 4px 0; }
 .sale-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  transition: all var(--trans-fast);
-  display: grid;
-  grid-template-columns: 4px 1fr;
+  background: var(--bg-card); border: 1px solid var(--border-light);
+  border-radius: var(--radius-md); padding: 14px;
+  box-shadow: var(--shadow-sm); transition: box-shadow var(--trans-fast);
 }
-.sale-card:hover { box-shadow: var(--shadow-md); border-color: var(--border); transform: translateX(2px); }
-.sale-card::before { content: ''; background: var(--grad-brand); display: block; }
-.sale-card.pending::before { background: var(--danger); }
-.sale-card.paid::before    { background: var(--success); }
-
-.sale-card-inner { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
-.sale-card-main { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
-.sale-card-left { display: flex; align-items: flex-start; gap: 12px; flex: 1; min-width: 0; }
+.sale-card:hover { box-shadow: var(--shadow-md); }
+.sale-card-main { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+.sale-card-left { display: flex; align-items: flex-start; gap: 10px; flex: 1; min-width: 0; }
 .sale-card-info { flex: 1; min-width: 0; }
-.sale-card-product { font-weight: 600; font-size: .92rem; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; }
-.sale-card-client { font-size: .78rem; color: var(--text-muted); margin-top: 3px; }
-.sale-card-variant {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-size: .75rem; color: var(--text-secondary); margin-top: 5px;
-  background: var(--bg-dark); padding: 3px 8px;
-  border-radius: var(--radius-full); width: fit-content;
-}
+.sale-card-product { font-weight: 600; font-size: .95rem; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sale-card-client { font-size: .8rem; color: var(--text-muted); margin-top: 2px; }
+.sale-card-variant { display: flex; align-items: center; gap: 5px; font-size: .78rem; color: var(--text-secondary); margin-top: 4px; flex-wrap: wrap; }
 .sale-card-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
-.sale-card-total { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 700; color: var(--rose-gold-deep); white-space: nowrap; }
-.sale-card-date { font-size: .68rem; color: var(--text-muted); white-space: nowrap; }
-.sale-card-footer { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; padding-top: 10px; border-top: 1px solid var(--border-light); }
+.sale-card-total { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 700; color: var(--rose-gold); }
+.sale-card-date { font-size: .72rem; color: var(--text-muted); }
+.sale-card-footer { display: flex; gap: 6px; flex-wrap: wrap; padding-top: 10px; border-top: 1px solid var(--border-light); }
 
 /* ── Debts mobile fix ── */
 @media (max-width: 600px) {
@@ -904,3 +888,86 @@
     padding: 7px 12px;
   }
 }
+
+/* ══════════════════════════════════════════
+   DEBT ITEMS — Mobile-first redesign
+   ══════════════════════════════════════════ */
+
+.debt-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow-sm);
+  display: flex; flex-direction: column; gap: 12px;
+  transition: box-shadow var(--trans-fast);
+}
+.debt-item:hover { box-shadow: var(--shadow-md); }
+
+/* Fila superior */
+.debt-item-top {
+  display: flex; align-items: center; gap: 12px;
+}
+.debt-age-indicator {
+  position: absolute; top: 0; right: 0;
+  width: 9px; height: 9px; border-radius: 50%;
+  border: 2px solid var(--bg-card);
+}
+.debt-item-info { flex: 1; min-width: 0; }
+.debt-item-name {
+  font-weight: 600; font-size: .92rem; color: var(--text-primary);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.debt-item-desc {
+  font-size: .74rem; color: var(--text-muted);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  margin-top: 2px;
+}
+.debt-item-amount {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem; font-weight: 700;
+  white-space: nowrap; flex-shrink: 0;
+}
+
+/* Barra de progreso */
+.debt-item-progress { display: flex; flex-direction: column; gap: 5px; }
+.debt-item-progress-bar {
+  height: 6px; background: var(--border-light);
+  border-radius: 99px; overflow: hidden;
+}
+.debt-item-progress-labels {
+  display: flex; justify-content: space-between;
+  font-size: .7rem; color: var(--text-muted);
+}
+
+/* Acciones */
+.debt-item-actions {
+  display: flex; align-items: center; gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-light);
+}
+.debt-action-btn {
+  flex: 1; padding: 9px 12px;
+  border-radius: var(--radius-md);
+  font-size: .82rem; font-weight: 600;
+  cursor: pointer; border: none;
+  transition: all var(--trans-fast);
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.debt-action-pay {
+  background: var(--success-dim); color: var(--success);
+  border: 1px solid rgba(90,158,120,0.2);
+}
+.debt-action-pay:hover { background: rgba(90,158,120,0.22); }
+
+.debt-action-icon {
+  width: 36px; height: 36px; flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  background: var(--bg-dark); border: 1px solid var(--border-light);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .9rem; cursor: pointer;
+  transition: all var(--trans-fast);
+}
+.debt-action-icon:hover { background: var(--rose-gold-dim); border-color: var(--border); }
+.debt-action-delete:hover { background: var(--danger-dim); border-color: rgba(192,80,96,0.2); }
