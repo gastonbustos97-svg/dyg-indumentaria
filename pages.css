@@ -892,7 +892,6 @@
 /* ══════════════════════════════════════════
    DEBT ITEMS — Mobile-first redesign
    ══════════════════════════════════════════ */
-
 .debt-item {
   background: var(--bg-card);
   border: 1px solid var(--border-light);
@@ -902,19 +901,21 @@
   box-shadow: var(--shadow-sm);
   display: flex; flex-direction: column; gap: 12px;
   transition: box-shadow var(--trans-fast);
+  /* CRÍTICO: evitar que el contenido se salga */
+  width: 100%; box-sizing: border-box; overflow: hidden;
 }
 .debt-item:hover { box-shadow: var(--shadow-md); }
 
-/* Fila superior */
 .debt-item-top {
   display: flex; align-items: center; gap: 12px;
+  width: 100%; min-width: 0;
 }
 .debt-age-indicator {
   position: absolute; top: 0; right: 0;
   width: 9px; height: 9px; border-radius: 50%;
   border: 2px solid var(--bg-card);
 }
-.debt-item-info { flex: 1; min-width: 0; }
+.debt-item-info { flex: 1; min-width: 0; overflow: hidden; }
 .debt-item-name {
   font-weight: 600; font-size: .92rem; color: var(--text-primary);
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
@@ -926,11 +927,10 @@
 }
 .debt-item-amount {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 1.15rem; font-weight: 700;
+  font-size: 1.1rem; font-weight: 700;
   white-space: nowrap; flex-shrink: 0;
 }
 
-/* Barra de progreso */
 .debt-item-progress { display: flex; flex-direction: column; gap: 5px; }
 .debt-item-progress-bar {
   height: 6px; background: var(--border-light);
@@ -941,19 +941,20 @@
   font-size: .7rem; color: var(--text-muted);
 }
 
-/* Acciones */
 .debt-item-actions {
-  display: flex; align-items: center; gap: 8px;
+  display: flex; align-items: center; gap: 6px;
   padding-top: 10px;
   border-top: 1px solid var(--border-light);
+  width: 100%; min-width: 0;
 }
 .debt-action-btn {
-  flex: 1; padding: 9px 12px;
+  flex: 1; padding: 9px 8px;
   border-radius: var(--radius-md);
   font-size: .82rem; font-weight: 600;
   cursor: pointer; border: none;
   transition: all var(--trans-fast);
-  display: flex; align-items: center; justify-content: center; gap: 6px;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+  white-space: nowrap; min-width: 0;
 }
 .debt-action-pay {
   background: var(--success-dim); color: var(--success);
@@ -969,5 +970,14 @@
   font-size: .9rem; cursor: pointer;
   transition: all var(--trans-fast);
 }
-.debt-action-icon:hover { background: var(--rose-gold-dim); border-color: var(--border); }
+.debt-action-icon:hover { background: var(--rose-gold-dim); }
 .debt-action-delete:hover { background: var(--danger-dim); border-color: rgba(192,80,96,0.2); }
+
+/* Tabs de fiados: scroll horizontal en mobile */
+.debts-tabs {
+  display: flex; gap: 6px;
+  overflow-x: auto; padding-bottom: 4px; margin-bottom: 14px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.debts-tabs::-webkit-scrollbar { display: none; }

@@ -18,7 +18,6 @@ function renderDebts() {
         <p>Gestión de cuentas corrientes y pagos</p>
       </div>
       <div class="page-header-actions">
-        <button class="btn btn-secondary btn-sm" onclick="renderDebts()">🔄 Actualizar</button>
         <button class="btn btn-primary" onclick="openAddDebtModal()">➕ Nueva Deuda</button>
       </div>
     </div>
@@ -42,7 +41,7 @@ function renderDebts() {
       </div>
     </div>
 
-    <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px;-webkit-overflow-scrolling:touch">
+    <div class="debts-tabs">
       <button class="tab-btn active" id="tab-active" onclick="switchDebtTab('active',this)" style="white-space:nowrap;flex-shrink:0;font-size:.82rem">⏳ Pendientes (${activeDebts.length})</button>
       <button class="tab-btn" id="tab-paid" onclick="switchDebtTab('paid',this)" style="white-space:nowrap;flex-shrink:0;font-size:.82rem">✅ Canceladas (${paidDebts.length})</button>
       <button class="tab-btn" id="tab-all" onclick="switchDebtTab('all',this)" style="white-space:nowrap;flex-shrink:0;font-size:.82rem">📋 Todas (${allDebts.length})</button>
@@ -86,8 +85,6 @@ function renderDebtsListHTML(debts) {
 
     return `
       <div class="debt-item animate-fade-in-up" style="animation-delay:${i*0.05}s">
-
-        <!-- Fila 1: avatar + nombre + monto restante -->
         <div class="debt-item-top">
           <div style="position:relative;flex-shrink:0">
             ${avatarHTML(d.clientName, null, 'md')}
@@ -102,10 +99,9 @@ function renderDebtsListHTML(debts) {
           </div>
         </div>
 
-        <!-- Fila 2: barra de progreso -->
         <div class="debt-item-progress">
           <div class="debt-item-progress-bar">
-            <div style="height:100%;width:${pct}%;background:${d.isPaid ? 'var(--success)' : 'var(--grad-brand)'};border-radius:99px;transition:width .6s ease"></div>
+            <div style="height:100%;width:${pct}%;background:${d.isPaid ? 'var(--success)' : 'var(--grad-brand)'};border-radius:99px"></div>
           </div>
           <div class="debt-item-progress-labels">
             <span>${fmt(d.paidAmount)} pagado</span>
@@ -113,20 +109,14 @@ function renderDebtsListHTML(debts) {
           </div>
         </div>
 
-        <!-- Fila 3: acciones compactas -->
         <div class="debt-item-actions">
           ${!d.isPaid ? `
-            <button class="debt-action-btn debt-action-pay" onclick="openPaymentModal('${esc(d.id)}')">
-              💳 Registrar pago
-            </button>
-            <button class="debt-action-icon" title="Cancelar deuda" onclick="markDebtFullyPaid('${esc(d.id)}')">✅</button>
-          ` : `
-            <span class="badge badge-success">✓ Cancelada</span>
-          `}
+            <button class="debt-action-btn debt-action-pay" onclick="openPaymentModal('${esc(d.id)}')">💳 Registrar pago</button>
+            <button class="debt-action-icon" title="Cancelar" onclick="markDebtFullyPaid('${esc(d.id)}')">✅</button>
+          ` : `<span class="badge badge-success">✓ Cancelada</span>`}
           <button class="debt-action-icon" title="Historial" onclick="openDebtHistory('${esc(d.id)}')">📋</button>
           <button class="debt-action-icon debt-action-delete" title="Eliminar" onclick="deleteDebtConfirm('${esc(d.id)}')">🗑️</button>
         </div>
-
       </div>
     `;
   }).join('');
