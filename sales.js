@@ -85,32 +85,35 @@ function renderSalesTbody(sales) {
   return `
     <div class="sales-cards">
       ${sales.map((s, i) => `
-        <div class="sale-card animate-fade-in-up" style="animation-delay:${i*0.02}s">
-          <div class="sale-card-main">
-            <div class="sale-card-left">
-              ${avatarHTML(s.clientName, null, 'sm')}
-              <div class="sale-card-info">
-                <div class="sale-card-product">${esc(s.productName)}</div>
-                <div class="sale-card-client">${esc(s.clientName)}</div>
-                <div class="sale-card-variant">
-                  ${s.variant ? colorDotHTML(s.variant.colorHex, s.variant.color) : ''}
-                  <span>${esc(s.variant?.size || '')}${s.variant ? ' · ' + esc(s.variant.color) : ''}</span>
-                  ${(s.qty||1) > 1 ? `<span style="color:var(--text-muted)">× ${s.qty}</span>` : ''}
+        <div class="sale-card ${s.isPaid ? 'paid' : 'pending'} animate-fade-in-up" style="animation-delay:${i*0.02}s">
+          <div class="sale-card-inner">
+            <div class="sale-card-main">
+              <div class="sale-card-left">
+                ${avatarHTML(s.clientName, null, 'sm')}
+                <div class="sale-card-info">
+                  <div class="sale-card-product">${esc(s.productName)}</div>
+                  <div class="sale-card-client">👩 ${esc(s.clientName)}</div>
+                  ${s.variant ? `
+                    <div class="sale-card-variant">
+                      ${colorDotHTML(s.variant.colorHex, s.variant.color)}
+                      <span>${esc(s.variant.size)} · ${esc(s.variant.color)}</span>
+                      ${(s.qty||1) > 1 ? `<span style="color:var(--text-muted)">× ${s.qty}</span>` : ''}
+                    </div>` : ''}
                 </div>
               </div>
+              <div class="sale-card-right">
+                <div class="sale-card-total">${fmt(s.price * (s.qty||1))}</div>
+                <div class="sale-card-date">${fmtDate(s.date, 'relative')}</div>
+                <button class="btn btn-danger btn-sm btn-icon" onclick="deleteSaleConfirm('${esc(s.id)}')">🗑️</button>
+              </div>
             </div>
-            <div class="sale-card-right">
-              <div class="sale-card-total">${fmt(s.price * (s.qty||1))}</div>
-              <div class="sale-card-date">${fmtDate(s.date, 'relative')}</div>
-              <button class="btn btn-danger btn-sm btn-icon" onclick="deleteSaleConfirm('${esc(s.id)}')">🗑️</button>
+            <div class="sale-card-footer">
+              ${paymentBadge(s.paymentMethod)}
+              ${s.isPaid
+                ? `<span class="badge badge-success">✓ Pagada</span>`
+                : `<span class="badge badge-warning">⏳ Pendiente</span>`
+              }
             </div>
-          </div>
-          <div class="sale-card-footer">
-            ${paymentBadge(s.paymentMethod)}
-            ${s.isPaid
-              ? `<span class="badge badge-success">✓ Pagada</span>`
-              : `<span class="badge badge-warning">⏳ Pendiente</span>`
-            }
           </div>
         </div>
       `).join('')}
