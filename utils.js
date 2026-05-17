@@ -343,6 +343,139 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+// ── Mobile Search ────────────────────────────
+function openMobileSearch() {
+  const overlay = document.getElementById('mobile-search-overlay');
+  if (!overlay) return;
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => {
+    document.getElementById('mobile-search-input')?.focus();
+  }, 300);
+}
+
+function closeMobileSearch() {
+  const overlay = document.getElementById('mobile-search-overlay');
+  if (!overlay) return;
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+  const input = document.getElementById('mobile-search-input');
+  if (input) input.value = '';
+  const results = document.getElementById('mobile-search-results');
+  if (results) results.innerHTML = `
+    <div class="mobile-search-hint">
+      <div class="mobile-search-hint-icon">🔍</div>
+      <div>Escribí para buscar clientas o prendas</div>
+    </div>`;
+  document.getElementById('mobile-search-clear')?.classList.remove('visible');
+}
+
+function clearMobileSearch() {
+  const input = document.getElementById('mobile-search-input');
+  if (input) { input.value = ''; input.focus(); }
+  document.getElementById('mobile-search-clear')?.classList.remove('visible');
+  const results = document.getElementById('mobile-search-results');
+  if (results) results.innerHTML = `
+    <div class="mobile-search-hint">
+      <div class="mobile-search-hint-icon">🔍</div>
+      <div>Escribí para buscar clientas o prendas</div>
+    </div>`;
+}
+
+function renderMobileSearchResults(q) {
+  const results = document.getElementById('mobile-search-results');
+  if (!results) return;
+
+  const clients  = store.getClients().filter(c => c.name.toLowerCase().includes(q));
+  const products = store.getProducts().filter(p =>
+    p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q)
+  );
+
+  if (!clients.length && !products.length) {
+    results.innerHTML = `
+      <div class="mobile-search-empty">
+        <div class="mobile-search-empty-icon">😔</div>
+        Sin resultados para "<strong>${esc(q)}</strong>"
+      </div>`;
+    return;
+  }
+
+  let html = '';
+
+  if (clients.length) {
+    html += `<div class="mobile-search-section-label">Clientas</div>`;
+    html += clients.slice(0, 6).map(c => {
+      const debt = store.getClientDebts(c.id).filter(d => !d.isPaid).length;
+      return `
+        <div class="mobile-search-item" onclick="closeMobileSearch();navigate('clients');setTimeout(()=>openClientDetail('${esc(c.id)}'),150)">
+          <div class="mobile-search-item-thumb">
+            ${c.photo ? `<img src="${c.photo}" alt="">` : `<span>${esc(initials(c.name))}</span>`}
+          </div>
+          <div class="mobile-search-item-info">
+            <div class="mobile-search-item-name">${esc(c.name)}</div>
+            <div class="mobile-search-item-sub">
+              ${c.phone ? '📞 ' + esc(c.phone) : 'Sin teléfono'}
+              ${debt > 0 ? ` · <span style="color:var(--danger)">⚠️ ${debt} deuda${debt>1?'s':''}</span>` : ''}
+            </div>
+          </div>
+          <div class="mobile-search-item-arrow">›</div>
+        </div>`;
+    }).join('');
+  }
+
+  if (products.length) {
+    html += `<div class="mobile-search-section-label">Prendas</div>`;
+    html += products.slice(0, 6).map(p => {
+      const stock = p.variants.reduce((s, v) => s + (v.stock || 0), 0);
+      return `
+        <div class="mobile-search-item" onclick="closeMobileSearch();navigate('catalog');setTimeout(()=>openProductDetail('${esc(p.id)}'),150)">
+          <div class="mobile-search-item-thumb">
+            ${p.photos?.[0] ? `<img src="${p.photos[0]}" alt="">` : '👗'}
+          </div>
+          <div class="mobile-search-item-info">
+            <div class="mobile-search-item-name">${esc(p.name)}</div>
+            <div class="mobile-search-item-sub">${esc(p.category)} · ${fmt(p.price)} · Stock: ${stock}</div>
+          </div>
+          <div class="mobile-search-item-arrow">›</div>
+        </div>`;
+    }).join('');
+  }
+
+  results.innerHTML = html;
+}
+
+window.openMobileSearch  = openMobileSearch;
+window.closeMobileSearch = closeMobileSearch;
+window.clearMobileSearch = clearMobileSearch;
+
+// Inicializar listener del input mobile
+document.addEventListener('DOMContentLoaded', () => {
+  const mobileInput = document.getElementById('mobile-search-input');
+  const clearBtn    = document.getElementById('mobile-search-clear');
+
+  if (mobileInput) {
+    mobileInput.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      clearBtn?.classList.toggle('visible', q.length > 0);
+      if (q.length < 2) {
+        const results = document.getElementById('mobile-search-results');
+        if (results) results.innerHTML = `
+          <div class="mobile-search-hint">
+            <div class="mobile-search-hint-icon">🔍</div>
+            <div>Escribí para buscar clientas o prendas</div>
+          </div>`;
+        return;
+      }
+      renderMobileSearchResults(q);
+    });
+  }
+
+  // Cerrar con Escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeMobileSearch();
+  });
+});
+
 // ── WhatsApp Receipts ────────────────────────
 function sendWhatsAppReceipt(phone, text) {
   if (!phone) { toast('La clienta no tiene teléfono registrado', 'warning'); return; }

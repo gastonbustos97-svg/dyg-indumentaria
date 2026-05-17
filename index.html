@@ -154,6 +154,7 @@
           <div id="search-dropdown" class="search-dropdown"></div>
         </div>
 
+        <button class="topbar-btn mobile-search-btn" title="Buscar" onclick="openMobileSearch()">🔍</button>
         <button class="topbar-btn theme-toggle-btn" title="Alternar Tema" onclick="toggleTheme()">🌙</button>
         <button class="topbar-btn" title="Nueva venta" onclick="navigate('sales');openAddSaleModal()">🛍️</button>
         <button class="topbar-btn" title="Nueva clienta" onclick="navigate('clients');openAddClientModal()">👩</button>
@@ -201,6 +202,22 @@
     </div>
   </div>
 </nav>
+
+<!-- MOBILE SEARCH OVERLAY -->
+<div id="mobile-search-overlay" class="mobile-search-overlay">
+  <div class="mobile-search-bar">
+    <button class="mobile-search-back" onclick="closeMobileSearch()">←</button>
+    <input type="text" id="mobile-search-input" class="mobile-search-input"
+           placeholder="Buscar clientas, prendas..." autocomplete="off">
+    <button class="mobile-search-clear" id="mobile-search-clear" onclick="clearMobileSearch()">✕</button>
+  </div>
+  <div class="mobile-search-results" id="mobile-search-results">
+    <div class="mobile-search-hint">
+      <div class="mobile-search-hint-icon">🔍</div>
+      <div>Escribí para buscar clientas o prendas</div>
+    </div>
+  </div>
+</div>
 
 <!-- SCRIPTS -->
 <script src="data.js"></script>
