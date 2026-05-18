@@ -297,11 +297,75 @@
   .page-header { margin-bottom: 18px; flex-direction: column; align-items: flex-start; }
   .page-header-left h2 { font-size: 1.3rem; }
   .page-header-actions { width: 100%; justify-content: flex-end; }
-  /* Ocultar botones secundarios poco importantes en mobile */
   .page-header-actions .btn-secondary { display: none; }
+
+  /* Ocultar botones duplicados topbar: dejar solo 🔍 y 🌙 */
+  .topbar-actions .topbar-btn:nth-child(n+3) { display: none !important; }
+
+  /* Stat cards: 2 columnas */
+  .stats-grid { grid-template-columns: repeat(2,1fr) !important; gap: 10px !important; }
+  .stat-card { padding: 14px 12px !important; }
+  .stat-card-value { font-size: 1.2rem !important; }
+
+  /* Debt items: asegurar que no se salga de pantalla */
+  .debt-item { width: 100%; box-sizing: border-box; overflow: hidden; }
+  .debt-item-top { width: 100%; min-width: 0; }
+  .debt-item-actions { width: 100%; min-width: 0; flex-wrap: nowrap; }
+  .debt-action-btn { min-width: 0; font-size: .78rem; padding: 8px 6px; }
 }
 
 @media (max-width: 480px) {
   .bottom-nav-item { padding: 6px 8px; min-width: 44px; }
   .bottom-nav-item .bn-icon { font-size: 1.2rem; }
 }
+
+/* ── Mobile Search Button ── */
+.mobile-search-btn { display: none; }
+@media (max-width: 768px) { .mobile-search-btn { display: flex; } }
+
+/* ── Mobile Search Overlay ── */
+.mobile-search-overlay {
+  position: fixed; inset: 0; background: var(--bg-deep);
+  z-index: 200; display: flex; flex-direction: column;
+  transform: translateY(-100%); opacity: 0; pointer-events: none;
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;
+}
+.mobile-search-overlay.open { transform: translateY(0); opacity: 1; pointer-events: all; }
+.mobile-search-bar {
+  display: flex; align-items: center; gap: 10px; padding: 12px 14px;
+  background: var(--bg-card); border-bottom: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm); flex-shrink: 0;
+}
+.mobile-search-back {
+  width: 36px; height: 36px; border-radius: var(--radius-sm);
+  background: var(--bg-dark); border: 1px solid var(--border-light);
+  color: var(--text-muted); font-size: 1.1rem;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.mobile-search-input {
+  flex: 1; height: 40px; background: var(--bg-input); border: 1px solid var(--border);
+  border-radius: var(--radius-full); padding: 0 16px;
+  font-size: 0.95rem; color: var(--text-primary); font-family: 'DM Sans', sans-serif;
+}
+.mobile-search-input:focus { outline: none; border-color: var(--rose-gold); }
+.mobile-search-input::placeholder { color: var(--text-muted); }
+.mobile-search-clear {
+  width: 32px; height: 32px; border-radius: 50%; background: var(--bg-dark);
+  border: none; color: var(--text-muted); font-size: 0.8rem;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  opacity: 0; transition: opacity var(--trans-fast);
+}
+.mobile-search-clear.visible { opacity: 1; }
+.mobile-search-results { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.mobile-search-hint { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 60px 24px; color: var(--text-muted); font-size: 0.85rem; text-align: center; }
+.mobile-search-hint-icon { font-size: 2.5rem; opacity: 0.4; }
+.mobile-search-section-label { padding: 10px 16px 4px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--rose-gold-deep); background: var(--bg-dark); }
+.mobile-search-item { display: flex; align-items: center; gap: 14px; padding: 13px 16px; border-bottom: 1px solid var(--border-light); cursor: pointer; }
+.mobile-search-item:active { background: var(--bg-dark); }
+.mobile-search-item-thumb { width: 40px; height: 40px; border-radius: var(--radius-sm); overflow: hidden; background: var(--bg-dark); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.2rem; }
+.mobile-search-item-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.mobile-search-item-info { flex: 1; min-width: 0; }
+.mobile-search-item-name { font-weight: 600; font-size: 0.9rem; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mobile-search-item-sub { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+.mobile-search-item-arrow { color: var(--text-muted); font-size: 0.9rem; flex-shrink: 0; }
+.mobile-search-empty { padding: 40px 24px; text-align: center; color: var(--text-muted); font-size: 0.85rem; }
