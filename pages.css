@@ -221,8 +221,8 @@
 
 .catalog-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 14px;
 }
 
 .product-card {
@@ -889,107 +889,22 @@
   }
 }
 
-/* ══════════════════════════════════════════
-   MOBILE FIXES — Fiados, Reportes, Stats
-   ══════════════════════════════════════════ */
-
-/* Stats grid: 2 columnas en mobile, nunca se desborda */
+/* ══ FIADOS: fix desborde mobile ══ */
 @media (max-width: 768px) {
-  .stats-grid {
+  #page-debts { overflow-x: hidden; }
+  #page-debts * { max-width: 100%; box-sizing: border-box; }
+  .di { width: 100% !important; overflow: hidden !important; }
+  .di-top { overflow: hidden !important; }
+  .di-amount { max-width: 80px; overflow: hidden; text-overflow: ellipsis; }
+  .di-actions { flex-wrap: nowrap !important; overflow: hidden; }
+  .di-btn-pay { min-width: 0 !important; overflow: hidden; }
+
+  /* Catálogo: 2 columnas fijas en mobile */
+  .catalog-grid {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 10px !important;
-    overflow: hidden !important;
   }
-  .stat-card {
-    padding: 14px 12px !important;
-    min-width: 0 !important;
-    overflow: hidden !important;
-  }
-  .stat-card-value { font-size: 1.1rem !important; }
-  .stat-card-icon  { width: 36px !important; height: 36px !important; font-size: .95rem !important; }
-
-  /* Reportes: 1 columna, sin desborde */
-  .reports-grid { grid-template-columns: 1fr !important; }
-
-  /* Fiados: debt-item no se sale */
-  .debt-item {
-    width: 100% !important;
-    box-sizing: border-box !important;
-    overflow: hidden !important;
-  }
-  .debt-item-top {
-    width: 100% !important;
-    min-width: 0 !important;
-  }
-  .debt-item-amount {
-    font-size: .95rem !important;
-    max-width: 90px !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
-  }
-  .debt-item-actions {
-    width: 100% !important;
-    flex-wrap: nowrap !important;
-    gap: 6px !important;
-  }
-  .debt-action-btn {
-    flex: 1 !important;
-    font-size: .78rem !important;
-    padding: 8px 6px !important;
-    min-width: 0 !important;
-  }
-  .debt-action-icon {
-    width: 34px !important;
-    height: 34px !important;
-    flex-shrink: 0 !important;
-  }
-
-  /* Fiados header: stats de 3 columnas igual */
-  .debts-stats-row {
-    overflow: hidden !important;
-    width: 100% !important;
-  }
+  .product-card-name { font-size: .82rem !important; }
+  .product-card-price { font-size: .9rem !important; }
+  .product-card-img-wrap { height: 140px !important; }
 }
-
-/* ══ DEBT ITEMS (di) — Mobile-first ══ */
-.di {
-  background: var(--bg-card);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
-  padding: 14px;
-  margin-bottom: 10px;
-  box-shadow: var(--shadow-sm);
-  display: flex; flex-direction: column; gap: 10px;
-  width: 100%; box-sizing: border-box; overflow: hidden;
-}
-.di-top { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.di-info { flex: 1; min-width: 0; overflow: hidden; }
-.di-name { font-weight: 600; font-size: .92rem; color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.di-desc { font-size: .74rem; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 2px; }
-.di-amount { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 700; white-space: nowrap; flex-shrink: 0; }
-.di-progress { display: flex; flex-direction: column; gap: 4px; }
-.di-bar { height: 6px; background: var(--border-light); border-radius: 99px; overflow: hidden; }
-.di-labels { display: flex; justify-content: space-between; font-size: .7rem; color: var(--text-muted); }
-.di-actions { display: flex; align-items: center; gap: 6px; padding-top: 8px; border-top: 1px solid var(--border-light); }
-.di-btn-pay {
-  flex: 1; padding: 9px 8px; border-radius: var(--radius-md);
-  font-size: .82rem; font-weight: 600; cursor: pointer; border: none;
-  background: var(--success-dim); color: var(--success);
-  border: 1px solid rgba(90,158,120,0.2);
-  display: flex; align-items: center; justify-content: center; gap: 5px;
-  transition: all var(--trans-fast);
-}
-.di-btn-pay:hover { background: rgba(90,158,120,0.25); }
-.di-icon {
-  width: 36px; height: 36px; flex-shrink: 0; border-radius: var(--radius-sm);
-  background: var(--bg-dark); border: 1px solid var(--border-light);
-  display: flex; align-items: center; justify-content: center;
-  font-size: .9rem; cursor: pointer; transition: all var(--trans-fast);
-}
-.di-icon:hover { background: var(--rose-gold-dim); }
-.di-icon-del:hover { background: var(--danger-dim); border-color: rgba(192,80,96,0.2); }
-
-/* ══ DARK MODE RESTORE ══ */
-[data-theme="dark"] .di { background: var(--bg-card); border-color: var(--border-light); }
-[data-theme="dark"] .di-bar { background: rgba(255,255,255,0.08); }
