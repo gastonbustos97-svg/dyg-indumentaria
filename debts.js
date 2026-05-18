@@ -18,6 +18,7 @@ function renderDebts() {
         <p>Gestión de cuentas corrientes y pagos</p>
       </div>
       <div class="page-header-actions">
+        <button class="btn btn-secondary btn-sm" onclick="renderDebts()">🔄 Actualizar</button>
         <button class="btn btn-primary" onclick="openAddDebtModal()">➕ Nueva Deuda</button>
       </div>
     </div>
@@ -41,7 +42,7 @@ function renderDebts() {
       </div>
     </div>
 
-    <div class="debts-tabs">
+    <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px;-webkit-overflow-scrolling:touch">
       <button class="tab-btn active" id="tab-active" onclick="switchDebtTab('active',this)" style="white-space:nowrap;flex-shrink:0;font-size:.82rem">⏳ Pendientes (${activeDebts.length})</button>
       <button class="tab-btn" id="tab-paid" onclick="switchDebtTab('paid',this)" style="white-space:nowrap;flex-shrink:0;font-size:.82rem">✅ Canceladas (${paidDebts.length})</button>
       <button class="tab-btn" id="tab-all" onclick="switchDebtTab('all',this)" style="white-space:nowrap;flex-shrink:0;font-size:.82rem">📋 Todas (${allDebts.length})</button>
@@ -80,45 +81,36 @@ function renderDebtsListHTML(debts) {
     const remaining   = d.totalAmount - d.paidAmount;
     const pct         = Math.round((d.paidAmount / d.totalAmount) * 100);
     const age         = Math.floor((Date.now() - d.createdAt) / 86400000);
-    const ageDotColor = age < 7 ? 'var(--success)' : age < 30 ? 'var(--warning)' : 'var(--danger)';
+    const ageColor    = age < 7 ? 'var(--success)' : age < 30 ? 'var(--warning)' : 'var(--danger)';
     const ageLabel    = age === 0 ? 'Hoy' : age === 1 ? 'Ayer' : `Hace ${age}d`;
 
-    return `
-      <div class="debt-item animate-fade-in-up" style="animation-delay:${i*0.05}s">
-        <div class="debt-item-top">
-          <div style="position:relative;flex-shrink:0">
-            ${avatarHTML(d.clientName, null, 'md')}
-            <div class="debt-age-indicator" style="background:${ageDotColor}"></div>
-          </div>
-          <div class="debt-item-info">
-            <div class="debt-item-name">${esc(d.clientName)}</div>
-            <div class="debt-item-desc">${esc(d.description)}</div>
-          </div>
-          <div class="debt-item-amount" style="color:${d.isPaid ? 'var(--success)' : 'var(--danger)'}">
-            ${d.isPaid ? '✓ ' : ''}${fmt(remaining)}
-          </div>
-        </div>
-
-        <div class="debt-item-progress">
-          <div class="debt-item-progress-bar">
-            <div style="height:100%;width:${pct}%;background:${d.isPaid ? 'var(--success)' : 'var(--grad-brand)'};border-radius:99px"></div>
-          </div>
-          <div class="debt-item-progress-labels">
-            <span>${fmt(d.paidAmount)} pagado</span>
-            <span>${pct}% · ${ageLabel}</span>
-          </div>
-        </div>
-
-        <div class="debt-item-actions">
-          ${!d.isPaid ? `
-            <button class="debt-action-btn debt-action-pay" onclick="openPaymentModal('${esc(d.id)}')">💳 Registrar pago</button>
-            <button class="debt-action-icon" title="Cancelar" onclick="markDebtFullyPaid('${esc(d.id)}')">✅</button>
-          ` : `<span class="badge badge-success">✓ Cancelada</span>`}
-          <button class="debt-action-icon" title="Historial" onclick="openDebtHistory('${esc(d.id)}')">📋</button>
-          <button class="debt-action-icon debt-action-delete" title="Eliminar" onclick="deleteDebtConfirm('${esc(d.id)}')">🗑️</button>
-        </div>
-      </div>
-    `;
+    return `<div class="di animate-fade-in-up" style="animation-delay:${i*0.05}s">
+  <div class="di-top">
+    <div style="position:relative;flex-shrink:0">
+      ${avatarHTML(d.clientName, null, 'md')}
+      <div style="position:absolute;top:0;right:0;width:9px;height:9px;border-radius:50%;background:${ageColor};border:2px solid var(--bg-card)"></div>
+    </div>
+    <div class="di-info">
+      <div class="di-name">${esc(d.clientName)}</div>
+      <div class="di-desc">${esc(d.description)}</div>
+    </div>
+    <div class="di-amount" style="color:${d.isPaid ? 'var(--success)' : 'var(--danger)'}">
+      ${d.isPaid ? '✓ ' : ''}${fmt(remaining)}
+    </div>
+  </div>
+  <div class="di-progress">
+    <div class="di-bar"><div style="height:100%;width:${pct}%;background:${d.isPaid ? 'var(--success)' : 'var(--rose-gold)'};border-radius:99px"></div></div>
+    <div class="di-labels"><span>${fmt(d.paidAmount)} pagado</span><span>${pct}% · ${ageLabel}</span></div>
+  </div>
+  <div class="di-actions">
+    ${!d.isPaid ? `
+      <button class="di-btn-pay" onclick="openPaymentModal('${esc(d.id)}')">💳 Registrar pago</button>
+      <button class="di-icon" onclick="markDebtFullyPaid('${esc(d.id)}')">✅</button>
+    ` : `<span class="badge badge-success">✓ Cancelada</span>`}
+    <button class="di-icon" onclick="openDebtHistory('${esc(d.id)}')">📋</button>
+    <button class="di-icon di-icon-del" onclick="deleteDebtConfirm('${esc(d.id)}')">🗑️</button>
+  </div>
+</div>`;
   }).join('');
 }
 

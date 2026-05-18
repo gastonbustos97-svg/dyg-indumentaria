@@ -951,3 +951,45 @@
     width: 100% !important;
   }
 }
+
+/* ══ DEBT ITEMS (di) — Mobile-first ══ */
+.di {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow-sm);
+  display: flex; flex-direction: column; gap: 10px;
+  width: 100%; box-sizing: border-box; overflow: hidden;
+}
+.di-top { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.di-info { flex: 1; min-width: 0; overflow: hidden; }
+.di-name { font-weight: 600; font-size: .92rem; color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.di-desc { font-size: .74rem; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 2px; }
+.di-amount { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 700; white-space: nowrap; flex-shrink: 0; }
+.di-progress { display: flex; flex-direction: column; gap: 4px; }
+.di-bar { height: 6px; background: var(--border-light); border-radius: 99px; overflow: hidden; }
+.di-labels { display: flex; justify-content: space-between; font-size: .7rem; color: var(--text-muted); }
+.di-actions { display: flex; align-items: center; gap: 6px; padding-top: 8px; border-top: 1px solid var(--border-light); }
+.di-btn-pay {
+  flex: 1; padding: 9px 8px; border-radius: var(--radius-md);
+  font-size: .82rem; font-weight: 600; cursor: pointer; border: none;
+  background: var(--success-dim); color: var(--success);
+  border: 1px solid rgba(90,158,120,0.2);
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+  transition: all var(--trans-fast);
+}
+.di-btn-pay:hover { background: rgba(90,158,120,0.25); }
+.di-icon {
+  width: 36px; height: 36px; flex-shrink: 0; border-radius: var(--radius-sm);
+  background: var(--bg-dark); border: 1px solid var(--border-light);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .9rem; cursor: pointer; transition: all var(--trans-fast);
+}
+.di-icon:hover { background: var(--rose-gold-dim); }
+.di-icon-del:hover { background: var(--danger-dim); border-color: rgba(192,80,96,0.2); }
+
+/* ══ DARK MODE RESTORE ══ */
+[data-theme="dark"] .di { background: var(--bg-card); border-color: var(--border-light); }
+[data-theme="dark"] .di-bar { background: rgba(255,255,255,0.08); }
